@@ -1,7 +1,8 @@
 define(['loadash'],function(_){
+    var __pdfDocument;
     return function (pdfDocument){
-        const children = pdfDocument.map(pdfStructureToHTMLComponent)
-
+        __pdfDocument = pdfDocument;
+        const children = pdfDocument.content.map(pdfStructureToHTMLComponent)
         return Div({}, children)
     }
 
@@ -21,7 +22,8 @@ define(['loadash'],function(_){
       const gridSize = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
 
       return Div({
-        class: `ui ${props.size ? gridSize[props.size-1] + ' columns' : ''} grid`,
+        class: 'ui' + (props.size ? (gridSize[props.size-1] + ' columns') : '') + ' grid',
+        style: 'display: table' //TODO: options
       }, children)
     }
 
@@ -30,7 +32,7 @@ define(['loadash'],function(_){
         return Div({}, pdfStructureToHTMLComponent(component))
       }
 
-      if(_.isString(component)){
+      if(_.isString(component) || _.isNumber(component)){
         return Paragraph({}, [component])
       }
 
@@ -46,8 +48,10 @@ define(['loadash'],function(_){
         const children = component.table.body.map(row => {
           return Div({
             class: 'row',
+            style: 'display: table-row' //TODO: options
           }, row.map(column => Div({
             class: 'column',
+            style: 'display: table-cell' //TODO: options
           }, [pdfStructureToHTMLComponent(column)])))
         })
 
@@ -85,11 +89,13 @@ define(['loadash'],function(_){
     }
 
     function pdfPropsToHTMLAttrs(pdfProps){
-      return Object.keys(pdfProps).reduce((acc, prop) => {
-        if(prop === 'bold'){
-          Object.assign({},acc,{style: 'font-weight: bold;'+acc.style});
-        }
-        return acc
-      }, { style: '' })
+        return Object.keys(pdfProps).reduce((acc, prop) => {
+            if (prop === 'style') var style = __pdfDocument.styles[pdfProps[prop]];
+            if(prop === 'bold' || style && style.bold) acc.style+='font-weight: bold;';
+            if (style) {
+                if (style.fillColor) acc.style+='background-color:'+style.fillColor+';';
+            }
+            return acc
+        }, { style: '' })
     }
 })
