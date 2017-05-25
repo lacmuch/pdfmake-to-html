@@ -9,19 +9,10 @@ Convert pdfmake's JSON tree into a DOM tree
 require.config({
     baseUrl: '.',
     paths: {
-        'pdfmake': '.../vfs_fonts',
-        'pdfMakeLib': '.../pdfmake',
         'pdfToHTML': '.../pdfmake-to-html/src/index',
         'loadash': '.../lodash.min'
     },
     shim: {
-        pdfMakeLib: {
-            exports: 'pdfMake'
-        },
-        pdfmake: {
-            deps: ['pdfMakeLib'],
-            exports: 'pdfMake'
-        },
         pdfToHTML: {
             deps: ['loadash'],
             exports: 'pdfToHTML'
