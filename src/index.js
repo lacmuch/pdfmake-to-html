@@ -90,7 +90,8 @@ define(['lodash'],function(_){
 
     function pdfPropsToHTMLAttrs(pdfProps){
         return Object.keys(pdfProps).reduce((acc, prop) => {
-            if (prop === 'style') var style = __pdfDocument.styles[pdfProps[prop]];
+            var val = pdfProps[prop];
+            if (prop === 'style') var style = _.isObject(val) ? val : __pdfDocument.styles[pdfProps[prop]];
             if(prop === 'bold' || style && style.bold) acc.style+='font-weight: bold;';
             if (style) {
                 if (style.fillColor) acc.style+='background-color:'+style.fillColor+';';
