@@ -21,13 +21,13 @@ require.config({
 })
 define(['pdfmake','pdfToHTML'], function(pdfMake,pdfToHTML) {
     const documentDefinition = {
-        content: {
+        content: [
             table: {
                 body: [
                   [ `I'm a column`, `I'm a column` ]
                 ]
-            }
-        }
+            ]
+        ]
     }
     const dom = pdfmakeToHTML(documentDefinition)
 }
