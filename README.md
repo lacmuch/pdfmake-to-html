@@ -10,25 +10,26 @@ require.config({
     baseUrl: '.',
     paths: {
         'pdfToHTML': '.../pdfmake-to-html/src/index',
-        'loadash': '.../lodash.min'
+        'lodash': '.../lodash.min'
     },
     shim: {
         pdfToHTML: {
-            deps: ['loadash'],
+            deps: ['lodash'],
             exports: 'pdfToHTML'
         }
     }
 })
 define(['pdfmake','pdfToHTML'], function(pdfMake,pdfToHTML) {
     const documentDefinition = {
-      table: {
-        body: [
-          [ `I'm a column`, `I'm a column` ],
-        ]
-      },
+        content: {
+            table: {
+                body: [
+                  [ `I'm a column`, `I'm a column` ]
+                ]
+            }
+        }
     }
-
-    const dom = pdfmakeToHTML(documentDefinition) // that's it!
+    const dom = pdfmakeToHTML(documentDefinition)
 }
 ```
 

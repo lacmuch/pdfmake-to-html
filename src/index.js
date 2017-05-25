@@ -1,4 +1,4 @@
-define(['loadash'],function(_){
+define(['lodash'],function(_){
     var __pdfDocument;
     return function (pdfDocument){
         __pdfDocument = pdfDocument;
