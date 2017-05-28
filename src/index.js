@@ -44,7 +44,7 @@ define(['lodash'],function(_){
         return Paragraph({}, [component])
       }
 
-      if(_.isString(component.text)){
+      if(_.isString(component.text) || _.isNumber(component.text)){
         return Paragraph(component, [component.text])
       }
 
@@ -125,7 +125,8 @@ define(['lodash'],function(_){
     function pdfPropsToHTMLAttrs(pdfProps){
         return Object.keys(pdfProps).reduce((acc, prop) => {
             if (__pdfDocument.html && __pdfDocument.html.inline) {
-                var val = pdfProps[prop];                
+                var val = pdfProps[prop]; 
+                if (prop === 'alignment') acc.style+='text-align: '+val+';';
                 if (prop === 'bold') acc.style+='font-weight: bold;';
                 if (prop === 'font') acc.style+='font-family: '+val+';';
                 if (prop === 'fontSize') acc.style+='font-size: '+(val+2)+'px;';
@@ -148,6 +149,6 @@ define(['lodash'],function(_){
                 if (prop === 'html') Object.assign(acc,pdfPropsToHTMLAttrs(val));   //override
             }
             return acc
-        }, { style: '' })
+        }, { style: 'padding: 2px 2px;' })
     }
 })
