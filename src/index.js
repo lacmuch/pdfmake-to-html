@@ -60,22 +60,24 @@ define(['lodash'],function(_){
         var style='';
         if (component.layout) {
             var layout = __pdfDocument.layouts[component.layout];
-            if (layout.vLineColor) {
-                style+='border-left-style: solid; border-left-color: '+layout.vLineColor+';';
-                style+='border-right-style: solid; border-right-color: '+layout.vLineColor+';';
+            if (layout) {
+                if (layout.vLineColor) {
+                    style+='border-left-style: solid; border-left-color: '+layout.vLineColor+';';
+                    style+='border-right-style: solid; border-right-color: '+layout.vLineColor+';';
+                }
+                if (layout.vLineWidth) {
+                    style+='border-left-width: '+layout.vLineWidth+'px;';
+                    style+='border-right-width: '+layout.vLineWidth+'px;';
+                }
+                if (layout.hLineColor) {
+                    style+='border-top-style: solid; border-top-color: '+layout.hLineColor+';';
+                    style+='border-bottom-style: solid; border-bottom-color: '+layout.hLineColor+';';
+                }
+                if (layout.hLineWidth) {
+                    style+='border-top-width: '+layout.hLineWidth+'px;';
+                    style+='border-bottom-width: '+layout.hLineWidth+'px;';
+                }
             }
-            if (layout.vLineWidth) {
-                style+='border-left-width: '+layout.vLineWidth+'px;';
-                style+='border-right-width: '+layout.vLineWidth+'px;';
-            }
-            if (layout.hLineColor) {
-                style+='border-top-style: solid; border-top-color: '+layout.hLineColor+';';
-                style+='border-bottom-style: solid; border-bottom-color: '+layout.hLineColor+';';
-            }
-            if (layout.hLineWidth) {
-                style+='border-top-width: '+layout.hLineWidth+'px;';
-                style+='border-bottom-width: '+layout.hLineWidth+'px;';
-            }            
         }
         const children = component.table.body.map(row => {
           return Div({
