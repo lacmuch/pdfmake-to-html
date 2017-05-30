@@ -37,7 +37,7 @@ define(['lodash'],function(_){
     //----
     function pdfStructureToHTMLComponent(component){
       if(_.isArray(component)){
-        return Div({}, pdfStructureToHTMLComponent(component))
+        return Div({}, component.map(item=>pdfStructureToHTMLComponent(item)))
       }
 
       if(_.isString(component) || _.isNumber(component)){
@@ -89,7 +89,7 @@ define(['lodash'],function(_){
           }, [pdfStructureToHTMLComponent(column)])))
         })
 
-        return HtmlGrid({size: component.table.body[0].length}, children)
+        return HtmlGrid({size: component.table.body[0]?component.table.body[0].length:''}, children)
       }
 
       if(component.stack){
