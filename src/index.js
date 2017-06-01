@@ -1,4 +1,4 @@
-define(['lodash'],function(_){
+(isnode ? crosscode(require, module) : define)(['lodash'],function(_){
     var __pdfDocument;
     return function (pdfDocument){
         __pdfDocument = pdfDocument;
