@@ -92,6 +92,13 @@
         return HtmlGrid({size: component.table.body[0]?component.table.body[0].length:''}, children)
       }
 
+      if (component.columns) {
+          return HtmlGrid({size: component.columns[0]?component.columns[0].length:''}, component.columns.map(column => Div({
+            class: 'column',
+            style: 'display: table-cell;'+style //TODO: options
+          }, [pdfStructureToHTMLComponent(column)])));
+      }
+
       if(component.stack){
         return Div({
           class: 'ui sixteen column wide',
