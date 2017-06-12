@@ -14,7 +14,9 @@
     }
 
     function Paragraph(props, children){
-      return createElement('div', pdfPropsToHTMLAttrs(props), children)
+      var p = pdfPropsToHTMLAttrs(props);
+      p.style+='padding: 2px 2px;';
+      return createElement('div', p, children)
     }
 
     function Span(props, children){
@@ -156,6 +158,6 @@
                 if (prop === 'html') Object.assign(acc,pdfPropsToHTMLAttrs(val));   //override
             }
             return acc
-        }, { style: 'padding: 2px 2px;' })
+        }, { style: '' })
     }
 })
