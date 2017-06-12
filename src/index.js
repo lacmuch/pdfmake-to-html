@@ -83,10 +83,10 @@
         const children = component.table.body.map(row => {
           return Div({
             class: 'row',
-            style: 'display: table-row;'+style //TODO: options
+            style: 'display: table-row;' + style
           }, row.map(column => Div({
             class: 'column',
-            style: 'display: table-cell; vertical-align: top;'+style //TODO: options
+            style: 'display: table-cell; vertical-align: top;' + style + pdfPropsToHTMLAttrs(column.style).style
           }, [pdfStructureToHTMLComponent(column)])))
         })
 
@@ -111,27 +111,25 @@
     }
 
     function createElement(tagName, htmlAttrs, children){
-      const tag = document.createElement(tagName)
-
-      // Append children if any
-      if (children) children.forEach(child => {
-        if(_.isString(child) || _.isNumber(child)){
-          if (_.isNumber(child)) tag.innerHTML += child;
-          else tag.innerHTML += child.replace(/\n/g, '<br/>')
-        } else if (child) {
-          tag.appendChild(child)
+        const tag = document.createElement(tagName);
+        // Append children if any
+        if (Array.isArray(children)) {
+            children.forEach(child => {
+                if (_.isObject(child)) tag.appendChild(child);
+                else if (_.isString(child)) tag.innerHTML += child.replace(/\n/g, '<br/>');
+                else tag.innerHTML += child;
+            });
         }
-      })
-
-      // Append tags
-      Object
-        .keys(htmlAttrs)
-        .forEach(attr => tag.setAttribute(attr, htmlAttrs[attr]))
-
-      return tag
+        // Append tags
+        Object.keys(htmlAttrs).forEach(attr => tag.setAttribute(attr, htmlAttrs[attr]))        
+        return tag
     }
 
     function pdfPropsToHTMLAttrs(pdfProps){
+        var ret = { style: '' };
+        if (!pdfProps) return ret;
+        else if (_.isString(pdfProps)) pdfProps = { style: pdfProps };
+
         return Object.keys(pdfProps).reduce((acc, prop) => {
             if (__pdfDocument.html && __pdfDocument.html.inline) {
                 var val = pdfProps[prop]; 
@@ -158,6 +156,6 @@
                 if (prop === 'html') Object.assign(acc,pdfPropsToHTMLAttrs(val));   //override
             }
             return acc
-        }, { style: '' })
+        }, ret)
     }
 })
