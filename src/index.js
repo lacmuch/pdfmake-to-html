@@ -27,11 +27,10 @@
 
     function HtmlGrid(props, children){
       const gridSize = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
-
-      return Div({
-        class: 'ui' + (props.size ? (gridSize[props.size-1] + ' columns') : '') + ' grid',
-        style: 'display: table; width: 100%;' //TODO: options
-      }, children)
+      var p = pdfPropsToHTMLAttrs(props);
+      p.class = 'ui' + (props.size ? (gridSize[props.size-1] + ' columns') : '') + ' grid';
+      p.style += 'display: table;'
+      return Div(p, children)
     }
 
     //----
@@ -58,7 +57,7 @@
 
       if(component.table){
         var style='';
-        if (component.layout) {
+        if (component.layout && __pdfDocument.layouts) {
             var layout = __pdfDocument.layouts[component.layout];
             if (layout) {
                 if (layout.vLineColor) {
@@ -85,17 +84,18 @@
             style: 'display: table-row;'+style //TODO: options
           }, row.map(column => Div({
             class: 'column',
-            style: 'display: table-cell;'+style //TODO: options
+            style: 'display: table-cell; vertical-align: top;'+style //TODO: options
           }, [pdfStructureToHTMLComponent(column)])))
         })
 
-        return HtmlGrid({size: component.table.body[0]?component.table.body[0].length:''}, children)
+        return HtmlGrid({size: component.table.body[0]?component.table.body[0].length:'',width: (component.table.widths?'100%':'')}, children)
       }
 
       if (component.columns) {
-          return HtmlGrid({size: component.columns[0]?component.columns[0].length:''}, component.columns.map(column => Div({
+          if (__pdfDocument.styles && __pdfDocument.defaultStyle && __pdfDocument.defaultStyle.columnGap) var gap='padding-left: '+__pdfDocument.defaultStyle.columnGap+'px;'
+          return HtmlGrid({size: component.columns[0]?component.columns[0].length:'',width:'100%'}, component.columns.map((column,i) => Div({
             class: 'column',
-            style: 'display: table-cell;'+style //TODO: options
+            style: 'display: table-cell;'+(i>0?gap:'') //TODO: options
           }, [pdfStructureToHTMLComponent(column)])));
       }
 
