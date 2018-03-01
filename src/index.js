@@ -1,4 +1,11 @@
 (isnode ? crosscode(require, module) : define)(['lodash'],function(_){
+    //NodeJS wrapper
+    if (typeof module!='undefined' && module.exports) {
+        var jsdom = require('jsdom');
+        const { JSDOM } = jsdom;
+        var document  = new JSDOM('<html></html>').window.document;
+    } 
+
     var __pdfDocument;
     return function (pdfDocument){
         __pdfDocument = pdfDocument;
