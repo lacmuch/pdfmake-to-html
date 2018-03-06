@@ -3,7 +3,7 @@
     if (typeof module!='undefined' && module.exports) {
         var jsdom = require('jsdom');
         const { JSDOM } = jsdom;
-        var document  = new JSDOM('<html></html>').window.document;
+        document  = new JSDOM('<html></html>').window.document;
     } 
 
     var __pdfDocument;
@@ -37,7 +37,7 @@
     function HtmlGrid(props, children){
       const gridSize = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
       var p = pdfPropsToHTMLAttrs(props);
-      p.class = 'ui' + (props.size ? (gridSize[props.size-1] + ' columns') : '') + ' grid';
+      p.class = 'ui ' + (props.size ? (gridSize[props.size-1] + ' columns') : '') + ' grid';
       p.style += 'display: table;'
       return Div(p, children)
     }
@@ -86,7 +86,10 @@
                     style+='border-bottom-width: '+layout.hLineWidth+'px;';
                 }
             }
+
+            if (component.table.widths && component.table.widths.every(w=>w=='*')) style += 'width:'+Math.round(100/component.table.widths.length)+'%;'
         }
+
         const children = component.table.body.map(row => {
           return Div({
             class: 'row',
